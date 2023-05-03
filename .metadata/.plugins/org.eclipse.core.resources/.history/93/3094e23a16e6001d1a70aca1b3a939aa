@@ -1,0 +1,5 @@
+.bg-dark{
+	
+	color:#ffd60a;
+	padding:12px;
+}

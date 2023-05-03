@@ -1,0 +1,5 @@
+.bg-dar{
+	
+	background:#ef233c;
+	padding:12px;
+}

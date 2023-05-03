@@ -1,0 +1,8 @@
+.bg-dar{
+	
+	background:#A30B37;
+	padding:12px;
+}
+.ki{
+	background-color:#00a6fb;
+}

@@ -1,0 +1,17 @@
+package com.blog.helper;
+import java.sql.*;
+public class ConnectionProvider {
+private static Connection conn;
+
+public static Connection getConnection() {
+	
+	try {
+		
+	} catch (SQLException se) {
+		se.printStackTrace();
+	}
+	
+	
+	return conn;
+}
+}

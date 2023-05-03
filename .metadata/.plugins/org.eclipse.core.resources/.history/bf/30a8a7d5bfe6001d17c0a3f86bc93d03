@@ -1,0 +1,57 @@
+package com.blog.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import com.blog.entities.User;
+
+public class UserDao {
+
+	private Connection connection;
+
+	// constructor .jab bhi kahin pe bhi is class ka object banega iske methods ko
+	// use karne ke liye ,Connection object pass karna hi hoga ,while creating
+	// methods.
+	public UserDao(Connection connection) {
+		this.connection = connection;
+
+	}
+
+	// method to insert data in the user table
+
+	public boolean insertUser(User user) {
+		Boolean f = false;
+		PreparedStatement pstmt=null;
+		try {
+			
+			String insertQuery = "insert into user(`name`,`profession`,`email`,`number`,`password`) values(?,?,?,?,?)";
+			if (connection!=null) {
+				pstmt= connection.prepareStatement(insertQuery);
+			}
+			if (pstmt!=null) {
+				pstmt.setString(1, user.getName());
+				pstmt.setString(2, user.getEmail());
+				pstmt.setString(3, user.getProfession());
+				pstmt.setString(4, user.getNumber());
+				pstmt.setString(5, user.getPassword());
+
+				int count = pstmt.executeUpdate();
+				if (count == 1) {
+					f = true;
+			}
+		
+
+			}
+
+		} catch (Exception e) {
+
+		}finally {
+			if () {
+				
+			}
+		}
+
+		return f;
+	}
+
+}

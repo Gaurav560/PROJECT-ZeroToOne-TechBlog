@@ -1,0 +1,13 @@
+.bg-dar{
+	
+	padding:14px;
+}
+.jumbo{
+	padding:60px;
+}
+.banner-background{
+clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 91%, 77% 88%, 36% 94%, 0 90%, 0 0);
+	
+	
+	
+}
