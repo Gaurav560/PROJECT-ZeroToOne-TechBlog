@@ -1,0 +1,8 @@
+package com.blog.servlets;
+
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("/ProfileEditServlet")
+public class ProfileEditServlet {
+
+}

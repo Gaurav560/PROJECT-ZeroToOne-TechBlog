@@ -1,0 +1,140 @@
+package com.blog.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.blog.entities.User;
+import com.mysql.cj.protocol.Resultset;
+
+public class UserDao {
+
+	private Connection connection;
+
+	// constructor .jab bhi kahin pe bhi is class ka object banega iske methods ko
+	// use karne ke liye ,Connection object pass karna hi hoga ,while creating
+	// methods.
+	public UserDao(Connection connection) {
+		this.connection = connection;
+
+	}
+
+	// method to insert data in the user table
+
+	public boolean insertUser(User user) {
+		Boolean f = false;
+		PreparedStatement pstmt = null;
+		try {
+
+			String insertQuery = "insert into user(`name`,`profession`,`email`,`number`,`password`) values(?,?,?,?,?)";
+			if (connection != null) {
+				pstmt = connection.prepareStatement(insertQuery);
+			}
+			if (pstmt != null) {
+				pstmt.setString(1, user.getName());
+				pstmt.setString(2, user.getProfession());
+				pstmt.setString(3, user.getEmail());
+				pstmt.setString(4, user.getNumber());
+				pstmt.setString(5, user.getPassword());
+
+				int count = pstmt.executeUpdate();
+				if (count == 1) {
+					f = true;
+				}
+
+			}
+
+		} catch (SQLException se) {
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+
+		return f;
+	}
+	
+	
+	
+	
+	
+	//method to check if user has login  details available in database 
+	public User getUserDetailsByEmailAndPassword(String Email,String Password) {
+		
+		
+		//initializing the local variable
+		User user=null;
+		try {
+			
+			 
+		 
+			//SQL query 
+			
+			String selectQuery="select * from user where email=? and password=?";
+			
+			//making prepare statement object 
+			PreparedStatement pstmt=connection.prepareStatement(selectQuery);
+			
+			//setting dynamic values in query
+			pstmt.setString(1, Email);
+			pstmt.setNString(2, Password);
+			
+			//executing the result and storing in the resultsetObject
+			ResultSet rset=pstmt.executeQuery();
+			
+			//next method of ResultSet Object throws boolean value
+			//data always comes in compressed form in resultSet so  ,extracting the data 
+			while (rset.next()) {
+				
+			//very important step otherwise nullPointer Exception 
+				//making  new User object and keeping in the local user reference
+			user=new User();
+				user.setId(rset.getInt(1));
+				user.setName(rset.getString(2));
+				user.setProfession(rset.getString(3));
+				user.setEmail(rset.getString(4));
+				user.setNumber(rset.getString(5));
+				user.setPassword(rset.getString(6));
+				user.setDateTime(rset.getTimestamp(7));
+				user.setProfile(rset.getString(8));
+			}
+			
+		} catch (Exception e) {
+	
+		}
+		
+		
+		
+		
+		
+		return user;
+	}
+	
+	
+	//method for updating user details 
+	
+	public boolean updateUserDetails(User user) {
+		boolean f=false;
+		try {
+			
+			String updateQuery="update techblog set email=?,number=?,password=?,profile=? where id=?";
+			PreparedStatement pstmt=connection.prepareStatement(updateQuery);
+			pstmt.setString(1, user.getEmail());
+			pstmt.setString(2, user.getNumber());
+			pstmt.setString(3, user.getPassword());
+			pstmt.setString(4, user.getProfile());
+			pstmt.setInt(5, user.getId());
+			int i=pstmt.executeUpdate();
+			
+			if (i==1) {
+				f=true;
+				
+			}
+		} catch (Exception e) {
+		e.printStackTrace();
+		}
+		return f;
+		
+	}
+
+}

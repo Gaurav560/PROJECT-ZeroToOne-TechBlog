@@ -1,0 +1,4 @@
+0:0:0:0:0:0:0:1 - - [08/May/2023:01:59:52 +0530] "GET /ZeroToOne/style.css HTTP/1.1" 404 774
+0:0:0:0:0:0:0:1 - - [08/May/2023:01:59:52 +0530] "GET /ZeroToOne/js/myjs.js HTTP/1.1" 304 -
+0:0:0:0:0:0:0:1 - - [08/May/2023:02:01:06 +0530] "GET /ZeroToOne/css/style.css HTTP/1.1" 404 782
+0:0:0:0:0:0:0:1 - - [08/May/2023:02:01:06 +0530] "GET /ZeroToOne/pics/Spring%20In%20Java%20(4).png HTTP/1.1" 304 -

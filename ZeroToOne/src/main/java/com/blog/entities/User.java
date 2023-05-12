@@ -10,7 +10,7 @@ public class User {
 	private String number;
 	private String password;
 	private Timestamp dateTime;
-	private String profile;
+    	private String profile;
 
 //zero argument constructor
 	public User() {
@@ -26,6 +26,7 @@ public class User {
 		this.email = email;
 		this.number = number;
 		this.password = password;
+	
 
 	}
 

@@ -68,7 +68,7 @@ public class UserDao {
 			
 			 
 		 
-			//sql query 
+			//SQL query 
 			
 			String selectQuery="select * from user where email=? and password=?";
 			
@@ -108,6 +108,33 @@ public class UserDao {
 		
 		
 		return user;
+	}
+	
+	
+	//method for updating user details 
+	
+	public boolean updateUserDetails(User user) {
+		boolean f=false;
+		try {
+			
+			String updateQuery="update user set email=?,number=?,password=?,profile=? where id=?";
+			PreparedStatement pstmt=connection.prepareStatement(updateQuery);
+			pstmt.setString(1, user.getEmail());
+			pstmt.setString(2, user.getNumber());
+			pstmt.setString(3, user.getPassword());
+			pstmt.setString(4, user.getProfile());
+			pstmt.setInt(5, user.getId());
+			int i=pstmt.executeUpdate();
+			
+			if (i==1) {
+				f=true;
+				
+			}
+		} catch (Exception e) {
+		e.printStackTrace();
+		}
+		return f;
+		
 	}
 
 }

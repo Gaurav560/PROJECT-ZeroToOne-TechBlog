@@ -1,3 +1,7 @@
+<%@page import="com.blog.entities.Cateogry"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.blog.helper.ConnectionProvider"%>
+<%@page import="com.blog.dao.PostDao"%>
 <%@page import="com.blog.entities.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -24,6 +28,16 @@
 <style>
 .bkc {
 	background-color: #e07a5f;
+}
+
+.bg {
+	background: #5b8e7d;
+
+}
+
+.bg1 {
+	background: #000814;
+		color:#f9f7f3;
 }
 </style>
 <body>
@@ -80,6 +94,10 @@
 							<li><a class="dropdown-item" href="#">Something else
 									here</a></li>
 						</ul></li>
+					<li class="nav-item"><a class="nav-link active"
+						aria-current="page" href="#" data-bs-toggle="modal"
+						data-bs-target="#write-post-modal"><i
+							class="fa-sharp fa-solid fa-pen-to-square"></i> Write</a></li>
 
 				</ul>
 				<form class="d-flex" role="search">
@@ -95,6 +113,19 @@
 		</div>
 	</nav>
 	<!-- NAVBAR ends here -->
+
+
+	<c:if test="${not empty sucMsg2 }">
+
+		<div class="alert alert-success text-center fs-3">${sucMsg2}</div>
+		<c:remove var="sucMsg2" scope="session" />
+		<%
+			response.setIntHeader("Refresh", 2);
+		%>
+	</c:if>
+
+
+
 
 
 	<!-- profile modal starts here -->
@@ -122,45 +153,124 @@
 							style="border-radius: 50%"> <br>
 						<%=user.getName()%><br>
 					</h1>
-					<!--  table starts here-->
 
-					<table class="table  table-success table-striped">
-						
-						<tbody>
-							<tr>
-								<th scope="row">ID</th>
-								<td><%=user.getId() %></td>
-								
-							</tr>
-							<tr>
-								<th scope="row">Email</th>
-								<td><%=user.getEmail() %></td>
-							
-							</tr>
-							<tr>
-								<th scope="row">Profession</th>
-								<td ><%=user.getProfession() %></td>
-								
-							</tr>
-							<tr>
-								<th scope="row">Contact</th>
-								<td ><%=user.getNumber() %></td>
-								
-							</tr>
+
+					<div id="profile-details">
+						<!--  table starts here-->
+
+						<table class="table  table-success table-striped">
+
+							<tbody>
 								<tr>
-								<th scope="row">Registered On</th>
-								<td ><%=user.getDateTime() %></td>
-								
-							</tr>
-						</tbody>
-					</table>
-					<!--  table ends here-->
+									<th scope="row">ID</th>
+									<td><%=user.getId()%></td>
+
+								</tr>
+								<tr>
+									<th scope="row">Email</th>
+									<td><%=user.getEmail()%></td>
+
+								</tr>
+								<tr>
+									<th scope="row">Profession</th>
+									<td><%=user.getProfession()%></td>
+
+								</tr>
+								<tr>
+									<th scope="row">Contact</th>
+									<td><%=user.getNumber()%></td>
+
+								</tr>
+								<tr>
+									<th scope="row">Registered On</th>
+									<td><%=user.getDateTime()%></td>
+
+								</tr>
+							</tbody>
+						</table>
+
+						<!--  table ends here-->
+					</div>
+					
+					
+					
+
+
+					<!-- profile edit starts here   -->
+
+					<div id="profile-edit" style="display: none;">
+						<h3 class="mt-4">Edit Details</h3>
+						<form action="ProfileEditServlet" method="post"
+							enctype="multipart/form-data">
+							<!--table starts here   -->
+
+							<table class="table table-success table-striped">
+								<tr>
+									<td>Id:</td>
+									<td><%=user.getId()%></td>
+								</tr>
+
+								<tr>
+									<td>Name:</td>
+									<td><%=user.getName()%></td>
+								</tr>
+
+								<tr>
+									<td>Name:</td>
+									<td><%=user.getProfession()%></td>
+								</tr>
+
+
+
+
+								<tr>
+									<td>Email:</td>
+									<td><input type="email" name="email" class="form-control"
+										value="<%=user.getEmail()%>"></td>
+								</tr>
+
+
+
+								<tr>
+									<td>Number:</td>
+									<td><input type="number" name="number"
+										class="form-control" value="<%=user.getNumber()%>"></td>
+								</tr>
+								<tr>
+									<td>Password:</td>
+									<td><input type="password" name="password"
+										class="form-control" value="<%=user.getPassword()%>"></td>
+								</tr>
+
+								<tr>
+									<td>New Profile Pic:</td>
+									<td><input type="file" name="image" class="form-control"
+										value="<%=user.getProfile()%>"></td>
+								</tr>
+
+
+
+
+							</table>
+
+							<div class="container">
+								<button class="btn btn-primary">Save</button>
+
+							</div>
+						</form>
+					</div>
+					<!-- profile edit ends  here   -->
+
+
+
 
 				</div>
+
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Edit</button>
+					<button type="button" id="edit-profile-btn" class="btn btn-primary">Edit</button>
 				</div>
 			</div>
 		</div>
@@ -169,6 +279,116 @@
 
 
 
+
+<!--  *******************************************************************************************-->
+
+
+
+
+	<!--write post modal starts here  -->
+
+
+
+	<!-- Modal -->
+	<div class="contaier-fluid text-dark">
+	<div class="modal fade " id="write-post-modal"
+		data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg1">
+					<h1 class="modal-title  fs-5" id="staticBackdropLabel">Zero To
+						One</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+
+				<!-- modal body -->
+
+
+				<div class="modal-body bg">
+					<form action="" method="post">
+
+
+						<div class="form-group mb-3">
+							<select class="form-control" name="cid">
+
+								<option selected disabled>--Select Category--</option>
+
+								<%
+									PostDao pDao = new PostDao(ConnectionProvider.getConnection());
+								ArrayList<Cateogry> list = pDao.getCateogries();
+
+								for (Cateogry c : list) {
+								%>
+
+								<option value="<%=c.getCid() %>"><%=c.getCname()%></option>
+
+
+								<%
+									}
+								%>
+
+
+
+
+							</select>
+
+
+						</div>
+						<div class="mb-3">
+							<label for="exampleFormControlInput1" class="form-label">Enter
+								post Title</label> <input type="text" class="form-control"
+								id="exampleFormControlInput1"
+								placeholder="Enter name of your post">
+						</div>
+
+						<div class="mb-3">
+							<label for="exampleFormControlTextarea1" class="form-label">
+								Content</label>
+							<textarea class="form-control" id="exampleFormControlTextarea1"
+								placeholder="Enter Content" rows="5"></textarea>
+						</div>
+						<div class="mb-3">
+							<label for="exampleFormControlTextarea1" class="form-label">
+								Code(if any)</label>
+							<textarea class="form-control" id="exampleFormControlTextarea1"
+								placeholder="Enter Code" rows="4"></textarea>
+						</div>
+						<div class="mb-3">
+							<label for="exampleFormControlTextarea1" class="form-label">Select
+								image for article:</label> <input type="file" class="form-control"
+								id="exampleFormControlInput1">
+						</div>
+					</form>
+
+
+
+				</div>
+				<div class="modal-footer">
+					<div class="container text-center">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Submit</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+	<!--write post modal  ends here  -->
 
 
 
@@ -193,5 +413,29 @@
 		integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
 		crossorigin="anonymous"></script>
 	<script src="js/myjs.js" type="text/javascript"></script>
+
+	<script>
+		$(document).ready(function() {
+			let editStatus = false;
+			$("#edit-profile-btn").click(function() {
+
+				/* toggle code for edit  */
+				if (editStatus == false) {
+
+					$("#profile-details").hide();
+					$("#profile-edit").show();
+					editStatus = true;
+					$(this).text("Back");
+				} else {
+
+					$("#profile-details").show();
+					$("#profile-edit").hide();
+					editStatus = false;
+					$(this).text("Edit");
+				}
+
+			})
+		})
+	</script>
 </body>
 </html>

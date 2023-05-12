@@ -1,0 +1,54 @@
+package com.blog.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import com.blog.entities.Cateogry;
+import com.mysql.cj.protocol.Resultset;
+
+public class PostDao {
+
+	
+	Connection connection;
+
+	public PostDao(Connection connection) {
+		super();
+		this.connection = connection;
+	}
+	
+	
+	public ArrayList<Cateogry> getCateogries(){
+		 ArrayList< Cateogry> aList=null;
+		
+		 
+		 try {
+			 
+			 
+			 String query="select * from cateogry";
+			 PreparedStatement pstmt=connection.prepareStatement(query);
+			 ResultSet rsResultset=pstmt.executeQuery();
+			 
+			 
+			 
+			 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		return aList;
+	}
+}

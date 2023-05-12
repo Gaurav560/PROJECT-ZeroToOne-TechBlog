@@ -1,0 +1,42 @@
+package com.blog.dao;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+
+import com.blog.entities.Cateogry;
+
+public class PostDao {
+
+	
+	Connection connection;
+
+	public PostDao(Connection connection) {
+		super();
+		this.connection = connection;
+	}
+	
+	
+	public ArrayList<Cateogry> getCateogries(){
+		 ArrayList< Cateogry> aList=null;
+		
+		 
+		 try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		return aList;
+	}
+}
